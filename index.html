@@ -18,7 +18,7 @@
             font-family: 'Roboto', sans-serif;
             min-height: 100vh;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
             overflow-x: hidden;
         }
@@ -87,60 +87,48 @@
             box-shadow: 0 0 15px #66fcf1;
         }
 
-        /* Troll Jumpscare overlay */
+        /* Màn hình troll bằng chữ giật mình */
         #scareOverlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            background-color: #000;
+            background-color: #ff0033;
             display: none;
             justify-content: center;
             align-items: center;
             z-index: 10000;
-            overflow: hidden;
+            text-align: center;
+            padding: 20px;
+            animation: bgFlash 0.1s infinite alternate;
         }
 
-        #scareOverlay img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            animation: zoomShake 0.1s infinite alternate;
-        }
-
-        #scareOverlay .user-tag {
-            position: absolute;
-            bottom: 50px;
-            background: rgba(255, 0, 0, 0.8);
-            color: #fff;
+        #scareText {
             font-family: 'Orbitron', sans-serif;
-            font-size: 2rem;
-            padding: 10px 20px;
-            border-radius: 10px;
-            text-shadow: 0 0 10px #000;
-            border: 2px solid #fff;
-            animation: pulse 0.5s infinite;
+            font-size: 3.5rem;
+            color: #ffff00;
+            text-shadow: 0 0 20px #000, 0 0 40px #000;
+            animation: textShake 0.08s infinite alternate;
+            word-break: break-word;
         }
 
-        @keyframes zoomShake {
-            0% { transform: scale(1) translate(0, 0); }
-            50% { transform: scale(1.08) translate(-10px, 10px); }
-            100% { transform: scale(1.05) translate(10px, -10px); }
+        @keyframes bgFlash {
+            0% { background-color: #ff0033; }
+            100% { background-color: #000000; }
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
+        @keyframes textShake {
+            0% { transform: scale(1) rotate(-2deg); }
+            100% { transform: scale(1.15) rotate(2deg); }
         }
 
-        /* Main Web Content */
+        /* Main Content */
         .container {
             max-width: 1100px;
             width: 90%;
             margin: 40px auto;
-            display: none; /* Hiển thị sau khi troll xong */
+            display: none;
         }
 
         header {
@@ -150,7 +138,7 @@
 
         header h1 {
             font-family: 'Orbitron', sans-serif;
-            font-size: 3rem;
+            font-size: 3.2rem;
             color: #66fcf1;
             text-shadow: 0 0 20px #66fcf1;
             margin-bottom: 10px;
@@ -167,11 +155,12 @@
             text-shadow: 0 0 10px #ff0055;
         }
 
-        /* Grid danh sách thành viên */
+        /* Grid thành viên */
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 20px;
+            margin-bottom: 50px;
         }
 
         .card {
@@ -180,9 +169,10 @@
             border-radius: 12px;
             padding: 20px;
             transition: 0.3s;
-            position: relative;
-            overflow: hidden;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .card:hover {
@@ -193,7 +183,7 @@
 
         .card.leader {
             grid-column: 1 / -1;
-            background: linear-gradient(135deg, #1f2833 0%, #3a0007 100%);
+            background: linear-gradient(135deg, #1f2833 0%, #4a0011 100%);
             border: 2px solid #ff0055;
             text-align: center;
         }
@@ -205,36 +195,153 @@
         .card h3 {
             font-family: 'Orbitron', sans-serif;
             color: #66fcf1;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             font-size: 1.3rem;
         }
 
         .card.leader h3 {
             color: #ff0055;
-            font-size: 1.8rem;
+            font-size: 2rem;
         }
 
-        .card p {
-            color: #c5c6c7;
-            font-size: 0.95rem;
-            line-height: 1.5;
+        .skill-box {
+            background: rgba(0, 0, 0, 0.4);
+            border-left: 3px solid #66fcf1;
+            padding: 8px 12px;
+            margin: 10px 0;
+            border-radius: 0 6px 6px 0;
+            font-size: 0.9rem;
+            color: #ffe600;
+        }
+
+        .card.leader .skill-box {
+            border-left-color: #ff0055;
+            display: inline-block;
+            text-align: left;
         }
 
         .aura-tag {
             display: inline-block;
             margin-top: 10px;
             background: #0b0c10;
-            color: #45a29e;
-            padding: 5px 10px;
+            color: #66fcf1;
+            padding: 6px 12px;
             border-radius: 5px;
             font-size: 0.85rem;
             font-weight: bold;
             border: 1px solid #45a29e;
+            align-self: flex-start;
         }
 
         .card.leader .aura-tag {
             color: #ff0055;
             border-color: #ff0055;
+            align-self: center;
+        }
+
+        /* Section Đánh Giá & Nhận Xét */
+        .review-section {
+            background: #1f2833;
+            border: 1px solid #66fcf1;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 0 20px rgba(102, 252, 241, 0.2);
+            margin-bottom: 40px;
+        }
+
+        .review-section h2 {
+            font-family: 'Orbitron', sans-serif;
+            color: #66fcf1;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .review-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stars-select {
+            display: flex;
+            gap: 10px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #555;
+        }
+
+        .stars-select span.active {
+            color: #ffe600;
+        }
+
+        .review-form textarea {
+            width: 100%;
+            height: 80px;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #45a29e;
+            background: #0b0c10;
+            color: #fff;
+            outline: none;
+            resize: none;
+        }
+
+        .review-form button {
+            align-self: flex-end;
+            padding: 10px 25px;
+            background: #66fcf1;
+            color: #0b0c10;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            font-family: 'Orbitron', sans-serif;
+            transition: 0.3s;
+        }
+
+        .review-form button:hover {
+            background: #45a29e;
+            box-shadow: 0 0 10px #66fcf1;
+        }
+
+        .review-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .review-item {
+            background: #0b0c10;
+            border: 1px solid #45a29e;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .review-item .author {
+            font-weight: bold;
+            color: #66fcf1;
+            margin-bottom: 5px;
+        }
+
+        .review-item .stars {
+            color: #ffe600;
+            margin-bottom: 5px;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #888;
+            border-top: 1px solid #1f2833;
+            width: 100%;
+            margin-top: auto;
+        }
+
+        footer span {
+            color: #66fcf1;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -244,79 +351,90 @@
     <div id="nameModal">
         <div class="modal-content">
             <h2>Định Danh Bá Khí</h2>
-            <p style="margin-bottom: 15px; color: #c5c6c7;">Vui lòng điền tên của bạn để gia nhập danh sách!</p>
-            <input type="text" id="usernameInput" placeholder="VD: Nhân Cuto">
+            <p style="margin-bottom: 15px; color: #c5c6c7;">Vui lòng điền tên của bạn vd: Nhân Cuto</p>
+            <input type="text" id="usernameInput" placeholder="Nhập tên tại đây...">
             <button onclick="startTroll()">XÁC NHẬN</button>
         </div>
     </div>
 
-    <!-- Màn hình Troll Jumpscare -->
+    <!-- Màn hình Troll bằng Chữ Jumpscare -->
     <div id="scareOverlay">
-        <img src="dog.jpg" alt="Bá Khí chó đeo khẩu trang">
-        <div class="user-tag" id="trollName"></div>
+        <div id="scareText"></div>
     </div>
 
     <!-- Nội dung chính Web Tổ 2 Bá Khí -->
     <div class="container" id="mainContent">
         <header>
             <h1>TỔ 2 BÁ KHÍ</h1>
-            <p class="welcome-user">Chào mừng tân thủ: <span id="displayUser">...</span> đã diện kiến các cao thủ!</p>
+            <p class="welcome-user">Chào mừng tân thủ: <span id="displayUser">...</span> đã tham gia tổ!</p>
         </header>
 
+        <!-- Danh sách thành viên phân cấp -->
         <div class="grid">
-            <!-- Tổ trưởng -->
+            <!-- 1. Tổ Trưởng -->
             <div class="card leader">
                 <h3>👑 TỔ TRƯỞNG: ĐẠT x NGỌC</h3>
                 <p>Cặp đôi tối thượng cai trị Tổ 2</p>
+                <div class="skill-box">🔥 Skill: Võ công phu Siêu cấp đa năng</div>
                 <div class="aura-tag">⚡ 2 NGHÌN TRĂM TỈ BÁ KHÍ</div>
             </div>
 
-            <!-- Thành viên -->
-            <div class="card">
-                <h3>Đạt</h3>
-                <p>Thành viên danh dự</p>
-                <div class="aura-tag">⚡ 999 Aura Bá Khí</div>
-            </div>
-
+            <!-- 2. Hân -->
             <div class="card">
                 <h3>Hân</h3>
                 <p>Bá Khí + Ác Quỷ</p>
+                <div class="skill-box">📢 Skill: Tiếng hét người khổng lồ</div>
                 <div class="aura-tag">⚡ 9999 Aura</div>
             </div>
 
+            <!-- 3. Lâm -->
             <div class="card">
-                <h3>Nghiêm Senpai</h3>
-                <p>Tiền bối truyền kỳ</p>
-                <div class="aura-tag">⚡ 99999 Aura</div>
+                <h3>Anh Lâm SiêuCapBaKhi</h3>
+                <p>Năng lượng hạ nhiệt cả lớp</p>
+                <div class="skill-box">⚔️ Skill: Vạn Kiếm Sờ Chim (Khiến cho Chim Trong Quần Sợ đến mức Chết ngay tại quần)</div>
+                <div class="aura-tag">⚡ 99999 Vạn Bá Khí (Lạnh chết lớp)</div>
             </div>
 
-            <div class="card">
-                <h3>Nhân</h3>
-                <p>Nhân Bá Khí</p>
-                <div class="aura-tag">⚡ 999999 Bá Khí</div>
-            </div>
-
-            <div class="card">
-                <h3>Tú</h3>
-                <p>Tú Bá Khí</p>
-                <div class="aura-tag">⚡ 3667 Aura</div>
-            </div>
-
+            <!-- 4. Ngân -->
             <div class="card">
                 <h3>Ngân</h3>
                 <p>Bá Khí + Siêu Cấp Hổ Cào</p>
+                <div class="skill-box">🐅 Skill: Võ Công Hổ Cào (Khiến cho Anh Đạt Và Anh Lâm Khiếp sợ)</div>
                 <div class="aura-tag">⚡ 9999 Aura</div>
             </div>
 
+            <!-- 5. Chinh -->
             <div class="card">
                 <h3>Chinh SadGirl</h3>
                 <p>Chinh u sầu bá khí</p>
                 <div class="aura-tag">⚡ 999 Aura | 1 Tỉ Bá Khí</div>
             </div>
 
+            <!-- Các thành viên tiếp theo -->
+            <div class="card">
+                <h3>Nghiêm Senpai</h3>
+                <p>Tiền bối truyền kỳ</p>
+                <div class="skill-box">🗣️ Skill: Mồm Liên Chưởng (Khiến người khác không cãi lại được)</div>
+                <div class="aura-tag">⚡ 99999 Aura</div>
+            </div>
+
+            <div class="card">
+                <h3>Nhân Bá Khí</h3>
+                <p>Thành viên uy lực</p>
+                <div class="skill-box">💥 Skill: Địt mẹ mày (Khiến mẹ được nhắc đến có Bụng bầu và đang tìm bố)</div>
+                <div class="aura-tag">⚡ 999999 Bá Khí</div>
+            </div>
+
+            <div class="card">
+                <h3>Tú Bá Khí</h3>
+                <p>Thành viên phong cách</p>
+                <div class="aura-tag">⚡ 3667 Aura</div>
+            </div>
+
             <div class="card">
                 <h3>Lan Mắt Khổng Lồi</h3>
-                <p>Tầm nhìn xuyên thấu</p>
+                <p>Tầm nhìn thấu thị</p>
+                <div class="skill-box">👁️ Skill: Mắt Aura (Khiến người khác sợ đến mức Đái ra máu)</div>
                 <div class="aura-tag">⚡ 999 Aura</div>
             </div>
 
@@ -327,75 +445,142 @@
             </div>
 
             <div class="card">
-                <h3>Lâm SiêuCapBaKhi</h3>
-                <p>Năng lượng hạ nhiệt cả lớp</p>
-                <div class="aura-tag">⚡ 99999 Vạn Bá Khí (Lạnh chết lớp)</div>
-            </div>
-
-            <div class="card">
                 <h3>Quang Kawwai Onichan</h3>
                 <p>Anh trai đáng yêu</p>
+                <div class="skill-box">🌸 Skill: Tỏa ra hào quang đáng sợ Mùi màu hồng Khủng khiếp (Khiến Cả Tổ chết sợ)</div>
                 <div class="aura-tag">⚡ -999 Bá Khí</div>
             </div>
 
             <div class="card">
                 <h3>Chán</h3>
                 <p>Bá Khí 6666 Vạn Melon + ThanhLong</p>
+                <div class="skill-box">🚬 Skill: Thuốc Lá (Tỏa ra Aura Bá Khói khiến ai cũng run chân chết sững)</div>
                 <div class="aura-tag">⚡ 6666 Vạn Bá Khí</div>
             </div>
 
             <div class="card">
                 <h3>Piao</h3>
-                <p>Tuy sai tên nhưng sở hữu kỹ năng đỉnh cao</p>
-                <p style="color: #ff0055; font-size: 0.85rem; margin-top:5px;">Skill: Thịt đè người</p>
+                <p>Sở hữu kỹ năng thể đè vô song</p>
+                <div class="skill-box">🐘 Skill: Thịt đè người</div>
                 <div class="aura-tag">⚡ 3 Trăm Tỉ Bá Khí</div>
             </div>
 
             <div class="card">
                 <h3>Truyền Baka</h3>
                 <p>I cư i cư Dễ Thương</p>
+                <div class="skill-box">🐕 Skill: Tỏa ra 1 Mùi Điên Dại của Chó (Khiến cả tổ phải Khiếp cười)</div>
                 <div class="aura-tag">⚡ -99999 Vạn Bá Khí</div>
+            </div>
+        </div>
+
+        <!-- Section Nhận xét & Đánh giá -->
+        <div class="review-section">
+            <h2>⭐ ĐÁNH GIÁ & NHẬN XÉT TỔ 2 ⭐</h2>
+            
+            <div class="review-form">
+                <div class="stars-select" id="starRating">
+                    <span onclick="setRating(1)">★</span>
+                    <span onclick="setRating(2)">★</span>
+                    <span onclick="setRating(3)">★</span>
+                    <span onclick="setRating(4)">★</span>
+                    <span onclick="setRating(5)" class="active">★</span>
+                </div>
+                <textarea id="reviewText" placeholder="Để lại nhận xét bá khí của bạn..."></textarea>
+                <button onclick="submitReview()">GỬI ĐÁNH GIÁ</button>
+            </div>
+
+            <div class="review-list" id="reviewList">
+                <div class="review-item">
+                    <div class="author">Chó Đẹp Trai</div>
+                    <div class="stars">★★★★★</div>
+                    <p>Web quá bá khí! Xem xong giật cả mình =))</p>
+                </div>
             </div>
         </div>
     </div>
 
+    <footer>
+        <p>Người Sáng Tác Web: <span>T</span> | Bản Quyền Thuộc Về Tổ 2 Bá Khí</p>
+    </footer>
+
     <script>
+        let selectedStars = 5;
+
         function startTroll() {
             const nameInput = document.getElementById('usernameInput').value.trim();
-            const userName = nameInput !== "" ? nameInput : "Kẻ Vô Danh";
+            const userName = nameInput !== "" ? nameInput : "Bạn";
 
-            // Ẩn modal nhập tên
+            // Ẩn Modal
             document.getElementById('nameModal').style.display = 'none';
 
-            // Cập nhật tên hiển thị
-            document.getElementById('trollName').innerText = userName;
+            // Cập nhật dòng chữ Troll
+            const scareOverlay = document.getElementById('scareOverlay');
+            const scareText = document.getElementById('scareText');
+            scareText.innerText = `Xin Chúc Mừng ${userName} là Chó Hihi`;
+            
             document.getElementById('displayUser').innerText = userName;
 
-            // Bật hiệu ứng Troll bùm 1 phát
-            const scareOverlay = document.getElementById('scareOverlay');
+            // Bật hiệu ứng Troll
             scareOverlay.style.display = 'flex';
 
-            // Tạo tiếng động giật mình (tùy chọn)
+            // Âm thanh giật mình
             try {
                 const ctx = new (window.AudioContext || window.webkitAudioContext)();
                 const osc = ctx.createOscillator();
                 const gain = ctx.createGain();
                 osc.type = 'sawtooth';
-                osc.frequency.setValueAtTime(150, ctx.currentTime);
+                osc.frequency.setValueAtTime(200, ctx.currentTime);
                 gain.gain.setValueAtTime(1, ctx.currentTime);
                 osc.connect(gain);
                 gain.connect(ctx.destination);
                 osc.start();
                 osc.stop(ctx.currentTime + 0.3);
-            } catch (e) {
-                console.log("Audio not supported");
-            }
+            } catch (e) {}
 
-            // Tự động xoá ảnh sau 3s và hiển thị trang danh sách
+            // Tự động tắt sau 3 giây và hiện Web chính
             setTimeout(() => {
                 scareOverlay.style.display = 'none';
                 document.getElementById('mainContent').style.display = 'block';
             }, 3000);
+        }
+
+        // Xử lý hệ thống Đánh giá
+        function setRating(stars) {
+            selectedStars = stars;
+            const starSpans = document.querySelectorAll('#starRating span');
+            starSpans.forEach((span, idx) => {
+                if (idx < stars) {
+                    span.classList.add('active');
+                } else {
+                    span.classList.remove('active');
+                }
+            });
+        }
+
+        function submitReview() {
+            const text = document.getElementById('reviewText').value.trim();
+            const userName = document.getElementById('displayUser').innerText;
+
+            if (text === "") {
+                alert("Vui lòng nhập lời nhận xét!");
+                return;
+            }
+
+            const reviewList = document.getElementById('reviewList');
+            const newReview = document.createElement('div');
+            newReview.className = 'review-item';
+            
+            let starStr = '★'.repeat(selectedStars) + '☆'.repeat(5 - selectedStars);
+
+            newReview.innerHTML = `
+                <div class="author">${userName}</div>
+                <div class="stars">${starStr}</div>
+                <p>${text}</p>
+            `;
+
+            reviewList.prepend(newReview);
+            document.getElementById('reviewText').value = "";
+            alert("Cảm ơn bạn đã gửi đánh giá bá khí!");
         }
     </script>
 </body>
