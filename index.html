@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tổ 2 Bá Khí</title>
+<style>
+  /* Cấu hình nền tối và hiệu ứng rung lắc */
+  body {
+    margin: 0;
+    padding: 0;
+    background: #0a0a0a;
+    color: #00ffcc;
+    font-family: 'Courier New', monospace;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    user-select: none;
+  }
+
+  /* Màn hình nhập tên */
+  #input-screen {
+    text-align: center;
+    z-index: 10;
+    animation: glow 2s infinite alternate;
+  }
+
+  #input-screen h1 {
+    font-size: 2rem;
+    text-shadow: 0 0 10px #00ffcc, 0 0 20px #00ffcc;
+    margin-bottom: 30px;
+  }
+
+  #input-screen input {
+    padding: 12px 20px;
+    font-size: 1.2rem;
+    border: 2px solid #00ffcc;
+    background: #111;
+    color: #00ffcc;
+    outline: none;
+    border-radius: 5px;
+    text-align: center;
+    width: 250px;
+    font-family: 'Courier New', monospace;
+  }
+
+  #input-screen input::placeholder {
+    color: #005555;
+  }
+
+  #input-screen button {
+    display: block;
+    margin: 20px auto 0;
+    padding: 12px 40px;
+    font-size: 1.2rem;
+    background: #00ffcc;
+    color: #000;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    font-family: 'Courier New', monospace;
+    transition: 0.2s;
+  }
+
+  #input-screen button:hover {
+    background: #00ccaa;
+    box-shadow: 0 0 20px #00ffcc;
+  }
+
+  /* Màn hình kết quả troll */
+  #result-screen {
+    display: none;
+    text-align: center;
+    z-index: 10;
+    animation: shake 0.5s infinite;
+  }
+
+  #result-screen img {
+    width: 300px;
+    border-radius: 15px;
+    box-shadow: 0 0 30px #ff0000, 0 0 60px #ff0000;
+    border: 3px solid #ff0000;
+    animation: pulse 0.8s infinite alternate;
+  }
+
+  #result-screen h2 {
+    font-size: 2.5 }
+
+rem;
+    color: #ff0000;
+    text-shadow: 0 0 20px #ff0000, 0 0 40px  #ff0000;
+    margin: 20px 0 10px;
+  }
+
+  #result-screen p {
+    font-size:  /*1.5rem;
+    color: #ffff00;
+    text-shadow: 0 0 10px #ffff00;
+  Danh sách thành viên tổ */
+  #member-list {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 350px;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.9);
+    border-left: 3px solid #00ffcc;
+    padding: 20px;
+    overflow-y: auto;
+    z-index: 20;
+    font-size: 0.9rem;
+    box-shadow: -5px 0 20px #00ffcc;
+  }
+
+  #member-list h3 {
+    text-align: center;
+    color: #ff00ff;
+    text-shadow: 0 0 10px #ff00ff;
+    font-size: 1.3rem;
+    border-bottom: 2px solid #ff00ff;
+    padding-bottom: 10px;
+  }
+
+  #member-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  #member-list li {
+    padding: 8px 0;
+    border-bottom: 1px dashed #005555;
+    color: #00ffcc;
+  }
+
+  #member-list li span {
+    color: #ffff00;
+    font-weight: bold;
+  }
+
+  /* Hiệu ứng rung lắc màn hình */
+  @keyframes shake {
+    0% { transform: translate(0, 0) rotate(0deg); }
+    20% { transform: translate(-5px, 5px) rotate(-1deg); }
+    40% { transform: translate(5px, -5px) rotate(1deg); }
+    60% { transform: translate(-5px, -5px) rotate(0deg); }
+    80% { transform: translate(5px, 5px) rotate(1deg); }
+    100% { transform: translate(0, 0) rotate(0deg); }
+  }
+
+  /* Hiệu ứng nhấp nháy */
+  @keyframes pulse {
+    from { transform: scale(1); box-shadow: 0 0 30px #ff0000; }
+    to { transform: scale(1.05); box-shadow: 0 0 60px #ff0000, 0 0 100px #ff0000; }
+  }
+
+  /* Hiệu ứng phát sáng */
+  @keyframes glow {
+    from { text-shadow: 0 0 5px #00ffcc; }
+    to { text-shadow: 0 0 20px #00ffcc, 0 0 40px #00ffcc; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Màn hình nhập tên -->
+<div id="input-screen">
+  <h1>VUI LÒNG ĐIỀN TÊN CỦA BẠN</h1>
+  <input type="text" id="name-input" placeholder="VD: Nhân Cuto" maxlength="30" autocomplete="off">
+  <button onclick="troll()">XÁC NHẬN</button>
+</div>
+
+<!-- Màn hình kết quả troll -->
+<div id="result-screen">
+  <img id="troll-img" src="" alt="Troll">
+  <h2 id="result-name"></h2>
+  <p>BÁ KHÍ TỔ 2</p>
+</div>
+
+<!-- Danh sách thành viên tổ -->
+<div id="member-list">
+  <h3>DANH SÁCH THÀNH VIÊN TỔ</h3>
+  <ul>
+    <li>Đạt Bá Khí <span>999 aura</span></li>
+    <li>Hân Bá Khí + Ác Quỷ <span>9999 aura</span></li>
+    <li>Nghi lớpêm Senpai <span>99999 aura</span></li>
+    <li>Nhân Bá Khí <span Qu>999999 Bá Khí</span></li>
+    <li>Tú Bá Khí <span>ang3667 aura</span></li>
+    <li>Ngân Bá Khí + Siêu Cấp Hổ C Kawào <span>9999 aura</span></li>
+    <li>Chinh SadGirl <span>999 aura</span></li>
+    <li>1tỉ bá khí Lan Mắt Khổng Lồi <span>999 aura</span></li>
+    <li>Kiều SadBod <span>300tỉ Bá khí 999 aura</span></li>
+    <li>Lâm SiêuCapBaKhi <span>99999 vạn bá khí</span></li>
+    <li>Lạnh chếtwai Onichan <span>-999 bá khí</span></li>
+    <li>Chán Bá Khí <span>6666 Vạn</span></li>
+    <li>Melon + ThanhLong <span>v.v</span></li>
+    <li>Piao Sai <span>tên tôi đek biết</span></li>
+    <li>Skill thịt đè người <span>3 trăm tỉ Bá khí</span></li>
+    <li>Truyền Baka <span>I cư i cư</span></li>
+    <li>Dễ Thương <span>-99999 vạn bá khí</span></li>
+    <li style="color:#ff00ff; font-weight:bold;">Tổ Trưởng Đạt x Ngọc <span>2 nghìn trăm tỉ bá khí</span></li>
+  </ul>
+</div>
+
+<script>
+  // Hàm xử lý troll
+  function troll() {
+    // Lấy tên người dùng nhập
+    var ten = document.getElementById('name-input').value.trim();
+    
+    // Nếu không nhập tên, mặc định là "Vô Danh"
+    if (ten === "") {
+      ten = "Vô Danh";
+    }
+
+    // Ẩn màn hình nhập
+    document.getElementById('input-screen').style.display = 'none';
+    
+    // Hiện màn hình kết quả
+    document.getElementById('result-screen').style.display = 'block';
+    
+    // Hiện danh sách thành viên
+    document.getElementById('member-list').style.display = 'block';
+    
+    // Gán tên vào kết quả
+    document.getElementById('result-name').innerText = ten + " BÁ KHÍ";
+    
+    // Gán ảnh con chó đeo khẩu trang (dùng ảnh từ link bạn cung cấp)
+    document.getElementById('troll-img').src = "https://i.ibb.co/6bZ8QpQ/cho-deo-khau-trang.jpg";
+    
+    // Phát âm thanh troll (tiếng bùm)
+    var audio = new Audio('https://www.soundjay.com/button/sounds/button-3.mp3');
+    audio.play().catch(function(e) {
+      // Trình duyệt chặn autoplay, bỏ qua
+    });
+  }
+</script>
+
+</body>
+</html>
