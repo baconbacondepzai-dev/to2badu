@@ -1,244 +1,402 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tổ 2 Bá Khí</title>
-<style>
-  /* Cấu hình nền tối và hiệu ứng rung lắc */
-  body {
-    margin: 0;
-    padding: 0;
-    background: #0a0a0a;
-    color: #00ffcc;
-    font-family: 'Courier New', monospace;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    user-select: none;
-  }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TỔ 2 BÁ KHÍ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-  /* Màn hình nhập tên */
-  #input-screen {
-    text-align: center;
-    z-index: 10;
-    animation: glow 2s infinite alternate;
-  }
+        body {
+            background-color: #0b0c10;
+            color: #fff;
+            font-family: 'Roboto', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+        }
 
-  #input-screen h1 {
-    font-size: 2rem;
-    text-shadow: 0 0 10px #00ffcc, 0 0 20px #00ffcc;
-    margin-bottom: 30px;
-  }
+        /* Modal nhập tên */
+        #nameModal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
 
-  #input-screen input {
-    padding: 12px 20px;
-    font-size: 1.2rem;
-    border: 2px solid #00ffcc;
-    background: #111;
-    color: #00ffcc;
-    outline: none;
-    border-radius: 5px;
-    text-align: center;
-    width: 250px;
-    font-family: 'Courier New', monospace;
-  }
+        .modal-content {
+            background: #1f2833;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 0 25px #66fcf1;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            border: 2px solid #66fcf1;
+        }
 
-  #input-screen input::placeholder {
-    color: #005555;
-  }
+        .modal-content h2 {
+            font-family: 'Orbitron', sans-serif;
+            color: #66fcf1;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
 
-  #input-screen button {
-    display: block;
-    margin: 20px auto 0;
-    padding: 12px 40px;
-    font-size: 1.2rem;
-    background: #00ffcc;
-    color: #000;
-    border: none;
-    border-radius: 5px;
-    font-weight: bold;
-    cursor: pointer;
-    font-family: 'Courier New', monospace;
-    transition: 0.2s;
-  }
+        .modal-content input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            border: 1px solid #45a29e;
+            background: #0b0c10;
+            color: #fff;
+            font-size: 16px;
+            text-align: center;
+            outline: none;
+        }
 
-  #input-screen button:hover {
-    background: #00ccaa;
-    box-shadow: 0 0 20px #00ffcc;
-  }
+        .modal-content button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: #66fcf1;
+            color: #0b0c10;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: 'Orbitron', sans-serif;
+        }
 
-  /* Màn hình kết quả troll */
-  #result-screen {
-    display: none;
-    text-align: center;
-    z-index: 10;
-    animation: shake 0.5s infinite;
-  }
+        .modal-content button:hover {
+            background: #45a29e;
+            box-shadow: 0 0 15px #66fcf1;
+        }
 
-  #result-screen img {
-    width: 300px;
-    border-radius: 15px;
-    box-shadow: 0 0 30px #ff0000, 0 0 60px #ff0000;
-    border: 3px solid #ff0000;
-    animation: pulse 0.8s infinite alternate;
-  }
+        /* Troll Jumpscare overlay */
+        #scareOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            overflow: hidden;
+        }
 
-  #result-screen h2 {
-    font-size: 2.5 }
+        #scareOverlay img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            animation: zoomShake 0.1s infinite alternate;
+        }
 
-rem;
-    color: #ff0000;
-    text-shadow: 0 0 20px #ff0000, 0 0 40px  #ff0000;
-    margin: 20px 0 10px;
-  }
+        #scareOverlay .user-tag {
+            position: absolute;
+            bottom: 50px;
+            background: rgba(255, 0, 0, 0.8);
+            color: #fff;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            padding: 10px 20px;
+            border-radius: 10px;
+            text-shadow: 0 0 10px #000;
+            border: 2px solid #fff;
+            animation: pulse 0.5s infinite;
+        }
 
-  #result-screen p {
-    font-size:  /*1.5rem;
-    color: #ffff00;
-    text-shadow: 0 0 10px #ffff00;
-  Danh sách thành viên tổ */
-  #member-list {
-    display: none;
-    position: fixed;
-    top: 0;
-    right: 0;
-    width: 350px;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.9);
-    border-left: 3px solid #00ffcc;
-    padding: 20px;
-    overflow-y: auto;
-    z-index: 20;
-    font-size: 0.9rem;
-    box-shadow: -5px 0 20px #00ffcc;
-  }
+        @keyframes zoomShake {
+            0% { transform: scale(1) translate(0, 0); }
+            50% { transform: scale(1.08) translate(-10px, 10px); }
+            100% { transform: scale(1.05) translate(10px, -10px); }
+        }
 
-  #member-list h3 {
-    text-align: center;
-    color: #ff00ff;
-    text-shadow: 0 0 10px #ff00ff;
-    font-size: 1.3rem;
-    border-bottom: 2px solid #ff00ff;
-    padding-bottom: 10px;
-  }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
 
-  #member-list ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
+        /* Main Web Content */
+        .container {
+            max-width: 1100px;
+            width: 90%;
+            margin: 40px auto;
+            display: none; /* Hiển thị sau khi troll xong */
+        }
 
-  #member-list li {
-    padding: 8px 0;
-    border-bottom: 1px dashed #005555;
-    color: #00ffcc;
-  }
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
 
-  #member-list li span {
-    color: #ffff00;
-    font-weight: bold;
-  }
+        header h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            color: #66fcf1;
+            text-shadow: 0 0 20px #66fcf1;
+            margin-bottom: 10px;
+        }
 
-  /* Hiệu ứng rung lắc màn hình */
-  @keyframes shake {
-    0% { transform: translate(0, 0) rotate(0deg); }
-    20% { transform: translate(-5px, 5px) rotate(-1deg); }
-    40% { transform: translate(5px, -5px) rotate(1deg); }
-    60% { transform: translate(-5px, -5px) rotate(0deg); }
-    80% { transform: translate(5px, 5px) rotate(1deg); }
-    100% { transform: translate(0, 0) rotate(0deg); }
-  }
+        .welcome-user {
+            font-size: 1.3rem;
+            color: #c5c6c7;
+        }
 
-  /* Hiệu ứng nhấp nháy */
-  @keyframes pulse {
-    from { transform: scale(1); box-shadow: 0 0 30px #ff0000; }
-    to { transform: scale(1.05); box-shadow: 0 0 60px #ff0000, 0 0 100px #ff0000; }
-  }
+        .welcome-user span {
+            color: #ff0055;
+            font-weight: bold;
+            text-shadow: 0 0 10px #ff0055;
+        }
 
-  /* Hiệu ứng phát sáng */
-  @keyframes glow {
-    from { text-shadow: 0 0 5px #00ffcc; }
-    to { text-shadow: 0 0 20px #00ffcc, 0 0 40px #00ffcc; }
-  }
-</style>
+        /* Grid danh sách thành viên */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: #1f2833;
+            border: 1px solid #45a29e;
+            border-radius: 12px;
+            padding: 20px;
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            border-color: #66fcf1;
+            box-shadow: 0 0 20px rgba(102, 252, 241, 0.4);
+        }
+
+        .card.leader {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, #1f2833 0%, #3a0007 100%);
+            border: 2px solid #ff0055;
+            text-align: center;
+        }
+
+        .card.leader:hover {
+            box-shadow: 0 0 30px rgba(255, 0, 85, 0.6);
+        }
+
+        .card h3 {
+            font-family: 'Orbitron', sans-serif;
+            color: #66fcf1;
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+
+        .card.leader h3 {
+            color: #ff0055;
+            font-size: 1.8rem;
+        }
+
+        .card p {
+            color: #c5c6c7;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .aura-tag {
+            display: inline-block;
+            margin-top: 10px;
+            background: #0b0c10;
+            color: #45a29e;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            border: 1px solid #45a29e;
+        }
+
+        .card.leader .aura-tag {
+            color: #ff0055;
+            border-color: #ff0055;
+        }
+    </style>
 </head>
 <body>
 
-<!-- Màn hình nhập tên -->
-<div id="input-screen">
-  <h1>VUI LÒNG ĐIỀN TÊN CỦA BẠN</h1>
-  <input type="text" id="name-input" placeholder="VD: Nhân Cuto" maxlength="30" autocomplete="off">
-  <button onclick="troll()">XÁC NHẬN</button>
-</div>
+    <!-- Modal nhập tên -->
+    <div id="nameModal">
+        <div class="modal-content">
+            <h2>Định Danh Bá Khí</h2>
+            <p style="margin-bottom: 15px; color: #c5c6c7;">Vui lòng điền tên của bạn để gia nhập danh sách!</p>
+            <input type="text" id="usernameInput" placeholder="VD: Nhân Cuto">
+            <button onclick="startTroll()">XÁC NHẬN</button>
+        </div>
+    </div>
 
-<!-- Màn hình kết quả troll -->
-<div id="result-screen">
-  <img id="troll-img" src="" alt="Troll">
-  <h2 id="result-name"></h2>
-  <p>BÁ KHÍ TỔ 2</p>
-</div>
+    <!-- Màn hình Troll Jumpscare -->
+    <div id="scareOverlay">
+        <img src="dog.jpg" alt="Bá Khí chó đeo khẩu trang">
+        <div class="user-tag" id="trollName"></div>
+    </div>
 
-<!-- Danh sách thành viên tổ -->
-<div id="member-list">
-  <h3>DANH SÁCH THÀNH VIÊN TỔ</h3>
-  <ul>
-    <li>Đạt Bá Khí <span>999 aura</span></li>
-    <li>Hân Bá Khí + Ác Quỷ <span>9999 aura</span></li>
-    <li>Nghi lớpêm Senpai <span>99999 aura</span></li>
-    <li>Nhân Bá Khí <span Qu>999999 Bá Khí</span></li>
-    <li>Tú Bá Khí <span>ang3667 aura</span></li>
-    <li>Ngân Bá Khí + Siêu Cấp Hổ C Kawào <span>9999 aura</span></li>
-    <li>Chinh SadGirl <span>999 aura</span></li>
-    <li>1tỉ bá khí Lan Mắt Khổng Lồi <span>999 aura</span></li>
-    <li>Kiều SadBod <span>300tỉ Bá khí 999 aura</span></li>
-    <li>Lâm SiêuCapBaKhi <span>99999 vạn bá khí</span></li>
-    <li>Lạnh chếtwai Onichan <span>-999 bá khí</span></li>
-    <li>Chán Bá Khí <span>6666 Vạn</span></li>
-    <li>Melon + ThanhLong <span>v.v</span></li>
-    <li>Piao Sai <span>tên tôi đek biết</span></li>
-    <li>Skill thịt đè người <span>3 trăm tỉ Bá khí</span></li>
-    <li>Truyền Baka <span>I cư i cư</span></li>
-    <li>Dễ Thương <span>-99999 vạn bá khí</span></li>
-    <li style="color:#ff00ff; font-weight:bold;">Tổ Trưởng Đạt x Ngọc <span>2 nghìn trăm tỉ bá khí</span></li>
-  </ul>
-</div>
+    <!-- Nội dung chính Web Tổ 2 Bá Khí -->
+    <div class="container" id="mainContent">
+        <header>
+            <h1>TỔ 2 BÁ KHÍ</h1>
+            <p class="welcome-user">Chào mừng tân thủ: <span id="displayUser">...</span> đã diện kiến các cao thủ!</p>
+        </header>
 
-<script>
-  // Hàm xử lý troll
-  function troll() {
-    // Lấy tên người dùng nhập
-    var ten = document.getElementById('name-input').value.trim();
-    
-    // Nếu không nhập tên, mặc định là "Vô Danh"
-    if (ten === "") {
-      ten = "Vô Danh";
-    }
+        <div class="grid">
+            <!-- Tổ trưởng -->
+            <div class="card leader">
+                <h3>👑 TỔ TRƯỞNG: ĐẠT x NGỌC</h3>
+                <p>Cặp đôi tối thượng cai trị Tổ 2</p>
+                <div class="aura-tag">⚡ 2 NGHÌN TRĂM TỈ BÁ KHÍ</div>
+            </div>
 
-    // Ẩn màn hình nhập
-    document.getElementById('input-screen').style.display = 'none';
-    
-    // Hiện màn hình kết quả
-    document.getElementById('result-screen').style.display = 'block';
-    
-    // Hiện danh sách thành viên
-    document.getElementById('member-list').style.display = 'block';
-    
-    // Gán tên vào kết quả
-    document.getElementById('result-name').innerText = ten + " BÁ KHÍ";
-    
-    // Gán ảnh con chó đeo khẩu trang (dùng ảnh từ link bạn cung cấp)
-    document.getElementById('troll-img').src = "https://i.ibb.co/6bZ8QpQ/cho-deo-khau-trang.jpg";
-    
-    // Phát âm thanh troll (tiếng bùm)
-    var audio = new Audio('https://www.soundjay.com/button/sounds/button-3.mp3');
-    audio.play().catch(function(e) {
-      // Trình duyệt chặn autoplay, bỏ qua
-    });
-  }
-</script>
+            <!-- Thành viên -->
+            <div class="card">
+                <h3>Đạt</h3>
+                <p>Thành viên danh dự</p>
+                <div class="aura-tag">⚡ 999 Aura Bá Khí</div>
+            </div>
 
+            <div class="card">
+                <h3>Hân</h3>
+                <p>Bá Khí + Ác Quỷ</p>
+                <div class="aura-tag">⚡ 9999 Aura</div>
+            </div>
+
+            <div class="card">
+                <h3>Nghiêm Senpai</h3>
+                <p>Tiền bối truyền kỳ</p>
+                <div class="aura-tag">⚡ 99999 Aura</div>
+            </div>
+
+            <div class="card">
+                <h3>Nhân</h3>
+                <p>Nhân Bá Khí</p>
+                <div class="aura-tag">⚡ 999999 Bá Khí</div>
+            </div>
+
+            <div class="card">
+                <h3>Tú</h3>
+                <p>Tú Bá Khí</p>
+                <div class="aura-tag">⚡ 3667 Aura</div>
+            </div>
+
+            <div class="card">
+                <h3>Ngân</h3>
+                <p>Bá Khí + Siêu Cấp Hổ Cào</p>
+                <div class="aura-tag">⚡ 9999 Aura</div>
+            </div>
+
+            <div class="card">
+                <h3>Chinh SadGirl</h3>
+                <p>Chinh u sầu bá khí</p>
+                <div class="aura-tag">⚡ 999 Aura | 1 Tỉ Bá Khí</div>
+            </div>
+
+            <div class="card">
+                <h3>Lan Mắt Khổng Lồi</h3>
+                <p>Tầm nhìn xuyên thấu</p>
+                <div class="aura-tag">⚡ 999 Aura</div>
+            </div>
+
+            <div class="card">
+                <h3>Kiều SadBod</h3>
+                <p>Thân thể u sầu đỉnh cao</p>
+                <div class="aura-tag">⚡ 300 Tỉ Bá Khí | 999 Aura</div>
+            </div>
+
+            <div class="card">
+                <h3>Lâm SiêuCapBaKhi</h3>
+                <p>Năng lượng hạ nhiệt cả lớp</p>
+                <div class="aura-tag">⚡ 99999 Vạn Bá Khí (Lạnh chết lớp)</div>
+            </div>
+
+            <div class="card">
+                <h3>Quang Kawwai Onichan</h3>
+                <p>Anh trai đáng yêu</p>
+                <div class="aura-tag">⚡ -999 Bá Khí</div>
+            </div>
+
+            <div class="card">
+                <h3>Chán</h3>
+                <p>Bá Khí 6666 Vạn Melon + ThanhLong</p>
+                <div class="aura-tag">⚡ 6666 Vạn Bá Khí</div>
+            </div>
+
+            <div class="card">
+                <h3>Piao</h3>
+                <p>Tuy sai tên nhưng sở hữu kỹ năng đỉnh cao</p>
+                <p style="color: #ff0055; font-size: 0.85rem; margin-top:5px;">Skill: Thịt đè người</p>
+                <div class="aura-tag">⚡ 3 Trăm Tỉ Bá Khí</div>
+            </div>
+
+            <div class="card">
+                <h3>Truyền Baka</h3>
+                <p>I cư i cư Dễ Thương</p>
+                <div class="aura-tag">⚡ -99999 Vạn Bá Khí</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function startTroll() {
+            const nameInput = document.getElementById('usernameInput').value.trim();
+            const userName = nameInput !== "" ? nameInput : "Kẻ Vô Danh";
+
+            // Ẩn modal nhập tên
+            document.getElementById('nameModal').style.display = 'none';
+
+            // Cập nhật tên hiển thị
+            document.getElementById('trollName').innerText = userName;
+            document.getElementById('displayUser').innerText = userName;
+
+            // Bật hiệu ứng Troll bùm 1 phát
+            const scareOverlay = document.getElementById('scareOverlay');
+            scareOverlay.style.display = 'flex';
+
+            // Tạo tiếng động giật mình (tùy chọn)
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(150, ctx.currentTime);
+                gain.gain.setValueAtTime(1, ctx.currentTime);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.3);
+            } catch (e) {
+                console.log("Audio not supported");
+            }
+
+            // Tự động xoá ảnh sau 3s và hiển thị trang danh sách
+            setTimeout(() => {
+                scareOverlay.style.display = 'none';
+                document.getElementById('mainContent').style.display = 'block';
+            }, 3000);
+        }
+    </script>
 </body>
 </html>
